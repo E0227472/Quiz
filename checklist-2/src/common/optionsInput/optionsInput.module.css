@@ -1,0 +1,14 @@
+.formGroup {
+  position: relative;
+}
+
+.image {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+
+.input {
+  margin-left: 90px;
+  width: 600px;
+}

@@ -1,0 +1,13 @@
+.formGroup {
+  position: relative;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+}
+
+
+
+.image{
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
