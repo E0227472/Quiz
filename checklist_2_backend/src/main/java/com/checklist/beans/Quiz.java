@@ -37,6 +37,7 @@ public class Quiz implements Serializable {
 		this.questions = questions;
 	}
 
+
 	public long getId() {
 		return id;
 	}
@@ -59,6 +60,11 @@ public class Quiz implements Serializable {
 
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
+	}
+	
+	public void addQuestion(Question question) {
+		questions.add(question);
+		question.setQuiz(this);
 	}
 
 }

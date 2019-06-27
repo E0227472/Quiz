@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @SuppressWarnings("serial")
 @Entity
@@ -25,7 +28,7 @@ public class Question implements Serializable {
 	@Column(name = "Question")
 	private String question;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn
 	private Quiz quiz;
 
@@ -64,6 +67,8 @@ public class Question implements Serializable {
 		return quiz;
 	}
 
+	// @JsonIgnore is added to prevent Json recursion
+	@JsonIgnore
 	public void setQuiz(Quiz quiz) {
 		this.quiz = quiz;
 	}
