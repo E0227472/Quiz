@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import Card from "../common/card/card";
 import Joi from "joi-browser";
 import Form from "../common/form";
+import Question from "./questionComponent";
+import QuestionButton from "../common/questionButton/questionButton";
 
 class createCheckList extends Form {
   state = {
-    data: { quiz: "", question: "", options: "" },
-    errors: {}
+    data: { quiz: "" },
+    errors: {},
+    questionArray: []
   };
 
   schema = {
@@ -14,18 +17,23 @@ class createCheckList extends Form {
     question: Joi.string().required(),
     options: Joi.string().required()
   };
-
-
+  // this event handler pushes a Question Component to an array each time button clicked.
+  // all the component array elements are then displayed
+  questionButtonHandler = () => {
+    let questionCopyArray = [...this.state.questionArray];
+    questionCopyArray.push(<Question />);
+    this.setState({ questionArray: questionCopyArray });
+  };
   render() {
+    const { questionArray } = this.state;
+    // the question component is being rendered when the question button is clicked
     return (
       <div className="container">
         <form>
           <Card>{this.renderInput("quiz", "fa fa-pencil", "Quiz")}</Card>
-
-          <Card>
-            {this.renderInput("question", "fa fa-quora", "Question")}
-            {this.renderOptionsInput("options", "fa fa-telegram", "Options")}
-          </Card>
+          {questionArray}
+          <br />
+          <QuestionButton onButtonclick={this.questionButtonHandler} />
         </form>
       </div>
     );

@@ -5,7 +5,8 @@ import OptionsInput from "./optionsInput/optionsInput";
 class Form extends Component {
   state = {
     data: {},
-    errors: {}
+    errors: {},
+    optionArraySize: 1
   };
 
   // method validates only one property on change.
@@ -16,6 +17,7 @@ class Form extends Component {
     const { error } = Joi.validate(obj, schema);
     return error ? "Please enter a valid input" : null;
   };
+
   // this method validates the entire form
   validate = () => {
     // mapping data to schema object where the properties are matched
@@ -43,7 +45,6 @@ class Form extends Component {
   // when user enters input, input captured in state.
   handleChange = e => {
     const errors = { ...this.state.errors };
-
     const errorMessage = this.validateProperty(e.currentTarget);
     if (errorMessage) errors[e.currentTarget.name] = errorMessage;
     else delete errors[e.currentTarget.name]; // delete keyword removes the property and its value
@@ -87,10 +88,10 @@ class Form extends Component {
         name={name}
         value={data[name]}
         onChange={this.handleChange}
-        error={errors[name]}/>
+        error={errors[name]}
+      />
     );
   }
-
 }
 
 export default Form;
