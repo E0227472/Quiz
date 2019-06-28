@@ -17,56 +17,52 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.checklist.beans.Question;
 import com.checklist.beans.Quiz;
+import com.checklist.exceptions.NoObjectExistException;
+import com.checklist.exceptions.QuizAlreadyExistsException;
 import com.checklist.repository.OptionsRepository;
 import com.checklist.repository.QuestionRepository;
 import com.checklist.repository.QuizRepository;
+import com.checklist.service.CheckListServiceImpl;
 
 @RestController
 public class CheckListController {
 
 	@Autowired
-	QuestionRepository questionRepository;
-
-	@Autowired
 	QuizRepository quizRepository;
 
 	@Autowired
-	OptionsRepository optionsRepository;
+	CheckListServiceImpl checkListServiceImpl;
+
+	
+
 
 	// get all quizzes
 	@GetMapping("/quizzes")
-	public List<Quiz> getAllQuizzes() {
-		return quizRepository.findAll();
+	public List<Quiz> getAllQuizzes() throws NoObjectExistException {
+		return checkListServiceImpl.getAllQuizzes();
 	}
 
 	// get quiz by id
 	@GetMapping("/quiz/id/{id}")
-	public Optional<Quiz> getQuizById(@PathVariable(value = "id") long id) {
-		return quizRepository.findById(id);
+	public Quiz getQuizById(@PathVariable(value = "id") long id) throws NoObjectExistException {
+
+		return checkListServiceImpl.getQuizById(id);
+
 	}
 
 	// get quiz by name
 	@GetMapping("/quiz/{quizName}")
-	public Quiz getQuizByName(@PathVariable(value = "quizName") String quizName) {
-		return quizRepository.findQuiz(quizName);
+	public Quiz getQuizByName(@PathVariable(value = "quizName") String quizName) throws NoObjectExistException {
+		return checkListServiceImpl.getQuizByName(quizName);
 	}
 
 	// Create a new quiz
 	@PostMapping("/createquiz")
-	public Quiz createQuiz(@Valid @RequestBody Quiz quiz) {
+	public Quiz createQuiz(@Valid @RequestBody Quiz quiz) throws QuizAlreadyExistsException {
+		// create quiz object only if name is not in database
+		
 
-		if (quiz.getQuestions() != null) {
-			for (Question question : quiz.getQuestions()) {
-				// this step important to link the child object (many) to parent so that foreign
-				// key wont be null
-				// to prevent recurssion problem when posting object, use @JsonIgnore at the
-				// setQuiz method
-				question.setQuiz(quiz);
-			}
-
-		}
-
-		return quizRepository.save(quiz);
+		return checkListServiceImpl.createQuiz(quiz);
 	}
 
 	// update a single quiz object based on the id
