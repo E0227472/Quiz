@@ -13,9 +13,7 @@ class createCheckList extends Form {
   };
 
   schema = {
-    quiz: Joi.string().required(),
-    question: Joi.string().required(),
-    options: Joi.string().required()
+    quiz: Joi.string().required()
   };
   // this event handler pushes a Question Component to an array each time button clicked.
   // all the component array elements are then displayed

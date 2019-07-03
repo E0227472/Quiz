@@ -11,27 +11,27 @@ class Form extends Component {
 
   // method validates only one property on change.
   // When text entered and deleted, the error message pops up.
-  validateProperty = ({ name, value }) => {
-    const obj = { [name]: value }; // obj should contain only one property that is being validated
-    const schema = { [name]: this.schema[name] }; // schema should only have one property that is being validated
-    const { error } = Joi.validate(obj, schema);
-    return error ? "Please enter a valid input" : null;
-  };
+  // validateProperty = ({ name, value }) => {
+  //   const obj = { [name]: value }; // obj should contain only one property that is being validated
+  //   const schema = { [name]: this.schema[name] }; // schema should only have one property that is being validated
+  //   const { error } = Joi.validate(obj, schema);
+  //   return error ? "Please enter a valid input" : null;
+  // };
 
-  // this method validates the entire form
-  validate = () => {
-    // mapping data to schema object where the properties are matched
-    const options = { abortEarly: false };
-    const { error } = Joi.validate(this.state.data, this.schema, options);
-    console.log(error);
-    if (!error) return null;
+  // // this method validates the entire form
+  // validate = () => {
+  //   // mapping data to schema object where the properties are matched
+  //   const options = { abortEarly: false };
+  //   const { error } = Joi.validate(this.state.data, this.schema, options);
+  //   console.log(error);
+  //   if (!error) return null;
 
-    const errors = { ...this.state.errors };
-    for (let item of error.details) // iterate over the details array
-      errors[item.path[0]] = item.message;
+  //   const errors = { ...this.state.errors };
+  //   for (let item of error.details) // iterate over the details array
+  //     errors[item.path[0]] = item.message;
 
-    return errors;
-  };
+  //   return errors;
+  // };
   // when form submitted, method checks for errors before form submission
   handleSubmit = e => {
     e.preventDefault(); // => preventDefault() prevents the default behaviour in this case the loading of the page
@@ -44,14 +44,17 @@ class Form extends Component {
   };
   // when user enters input, input captured in state.
   handleChange = e => {
-    const errors = { ...this.state.errors };
-    const errorMessage = this.validateProperty(e.currentTarget);
-    if (errorMessage) errors[e.currentTarget.name] = errorMessage;
-    else delete errors[e.currentTarget.name]; // delete keyword removes the property and its value
+    // const errors = { ...this.state.errors };
+    // const errorMessage = this.validateProperty(e.currentTarget);
+    // if (errorMessage) errors[e.currentTarget.name] = errorMessage;
+    // else delete errors[e.currentTarget.name]; // delete keyword removes the property and its value
     const data = { ...this.state.data }; // get a copy of the data object from state
     data[e.currentTarget.name] = e.currentTarget.value; // get the username that has been typed in textbox
-    this.setState({ data, errors }); // set the state to the new value
+    this.setState({ data }); // set the state to the new value
+    console.log(e.currentTarget.value);
   };
+
+  
 
   // method returns button jsx syntax
   renderButton(label) {
@@ -78,7 +81,7 @@ class Form extends Component {
   }
 
   // method returns input field
-  renderOptionsInput(name, iconClassName, placeholder, type = "text") {
+  renderOptionsInput(name, iconClassName, placeholder, handleOptionChange, type = "text") {
     const { data, errors } = this.state;
     return (
       <OptionsInput
@@ -87,7 +90,7 @@ class Form extends Component {
         type={type}
         name={name}
         value={data[name]}
-        onChange={this.handleChange}
+        onChange={handleOptionChange}
         error={errors[name]}
       />
     );
