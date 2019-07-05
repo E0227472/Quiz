@@ -14,10 +14,9 @@ function App() {
     : createStore)(reducer);
   return (
     <Provider store={store}>
-      <div style={{ padding: 15 }}>
-        <h2>Simple Form</h2>
+      <React.Fragment>
         <QuizForm />
-      </div>
+      </React.Fragment>
     </Provider>
   );
 }

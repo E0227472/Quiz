@@ -2,14 +2,14 @@ import React from 'react';
 
 
 const Button = (props) => {
-    const{onClick} = props;
+    const{onClick, label, styles} = props;
     return (
       <button 
       type="button" 
-      className="btn btn-light"
+        className={styles != null ? styles + " " + "btn btn-light" : "btn btn-light"}
       onClick = {onClick}
       >
-        + Option
+        {label}
       </button>
     );
 }
