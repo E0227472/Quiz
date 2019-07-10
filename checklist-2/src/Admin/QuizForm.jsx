@@ -1,115 +1,145 @@
-import React from 'react';
-import {Field, FieldArray, reduxForm} from 'redux-form';
+import React from "react";
+import { Field, FieldArray, reduxForm } from "redux-form";
 import styles from "./QuizForm.module.css";
 import Card from "../common/card/card";
 import Button from "../common/button/button";
-
+import RemoveButton from "../common/button/removebutton";
 
 // functional component for general input fields
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
-    <div className = {styles.alignCentre}>
-   
-        <div className = {styles.inputField}>
-            <input 
-            {...input} 
-            type={type} 
-            placeholder={label} 
-            className = "form-control"/>
-            {touched && error && <span>{error}</span>}
-        </div>
-  </div >
+  <div className={styles.alignCentre}>
+    <div className={styles.inputField}>
+      <input
+        {...input}
+        type={type}
+        placeholder={label}
+        className="form-control"
+      />
+      {touched && error && <span>{error}</span>}
+    </div>
+  </div>
 );
 
-// functional component to render the options 
+// functional component to render the options
 const renderOptions = ({ fields, meta: { error } }) => (
-    <ul>
-        <div className={styles.alignCentre}>
-            <div className={styles.inputField}>
-            <Button onClick={() => fields.push()} label = "Add Option" styles = {styles.AddOption}/>
-            </div>
+  <ul>
+    <div className={styles.alignCentre}>
+      <div className={styles.inputField}>
+        <Button
+          onClick={() => fields.push()}
+          label="Add Option"
+          styles={styles.AddOption}
+          type="button"
+          disabled=""
+        />
+      </div>
+    </div>
+    {fields.map((option, index) => (
+      <div key={index}>
+        <div className={styles.alignButtonRight}>
+          <RemoveButton
+            iconName="fa fa-trash"
+            onClick={() => fields.remove(index)}
+            styling={styles.smallerIconOption}
+          />
         </div>
-        {fields.map((option, index) => (
-            <li key={index}>
-                <button
-                    type="button"
-                    title="Remove Option"
-                    onClick={() => fields.remove(index)}
-                />
-                <Field
-                    name={option}
-                    type="text"
-                    component={renderField}
-                    label={`Option ${index + 1}`}
-                    placeholder = "Option"
-                />
-            </li>
-        ))}
-        {error && <li className="error">{error}</li>}
-    </ul>
+        <Field
+          name={option}
+          type="text"
+          component={renderField}
+          label={`Option ${index + 1}`}
+          placeholder="Option"
+        />
+      </div>
+    ))}
+    {error && <li className="error">{error}</li>}
+  </ul>
 );
 
-// functional component to render questions and the options 
-const renderQuestions = ({ fields, meta: { touched, error, submitFailed } }) => (
-    
-    <ul>
-        <div className = {styles.alignCentre}>
-        <div className = {styles.inputField}>
-                <Button onClick={() => fields.push()} label="Add Question" styles={styles.AddQuestion}/>
-            {(touched || submitFailed) && error && <span>{error}</span>}
-        </div>
-        </div>
-        {/** The question component is conditionally rendered when the field array has length != 0 */}
-        {fields.length != 0 ?
-       ( <Card>
+// functional component to render questions and the options
+const renderQuestions = ({
+  fields,
+  meta: { touched, error, submitFailed }
+}) => (
+  <ul>
+    {/** The question component is conditionally rendered when the field array has length != 0 */}
+    {fields.length != 0 ? (
+      <div>
         {fields.map((question, index) => (
-            <li key={index}>
-                <button
-                    type="button"
-                    title="Remove Question"
-                    onClick={() => fields.remove(index)}
+          <Card>
+            <div key={index}>
+              <div className={styles.alignButtonRight}>
+                <RemoveButton
+                  iconName="fa fa-trash"
+                  onClick={() => fields.remove(index)}
+                  styling={styles.enlargeIconQuestion}
                 />
-                <h4>Question #{index + 1}</h4>
+              </div>
 
-                <Field
-                    name = {question}
-                    type="text"
-                    component={renderField}
-                    label= {`Question ${index+1}`}
-                />
+              <h4 className={styles.alignQuestionLabel}>
+                Question {index + 1}
+              </h4>
 
-                <FieldArray name={`${question}.options`} component={renderOptions} />
-            </li>
+              <Field
+                name={question}
+                type="text"
+                component={renderField}
+                label={`Question ${index + 1}`}
+              />
+
+              <FieldArray
+                name={`${question}.options`}
+                component={renderOptions}
+              />
+            </div>
+          </Card>
         ))}
-</Card>) : null
-        }
-    </ul>
+      </div>
+    ) : null}
+    <div className={styles.alignCentre}>
+      <div className={styles.inputField}>
+        <Button
+          onClick={() => fields.push()}
+          label="Add Question"
+          styles={styles.AddQuestion}
+          type="button"
+          disabled=""
+        />
+        {(touched || submitFailed) && error && <span>{error}</span>}
+      </div>
+    </div>
+  </ul>
 );
 
 const QuizForm = props => {
-    const { handleSubmit, pristine, reset, submitting } = props;
-    return (
-        <form onSubmit={handleSubmit}>
-            <Card>
-            <Field
-                name="quiz"
-                type="text"
-                component={renderField}
-                label = "Quiz"
-            />
-            </Card>
-            <FieldArray name="questions" component={renderQuestions} />
-            <div>
-                <button type="submit" disabled={submitting}>Submit</button>
-                <button type="button" disabled={pristine || submitting} onClick={reset}>
-                    Clear Values
-        </button>
-            </div>
-        </form>
-    );
+  const { handleSubmit, pristine, reset, submitting } = props;
+  return (
+    <form onSubmit={handleSubmit}>
+      <Card>
+        <Field name="quiz" type="text" component={renderField} label="Quiz" />
+      </Card>
+      <FieldArray name="questions" component={renderQuestions} />
+
+      <div className={styles.alignCentre}>
+        <Button
+          label="Cancel"
+          styles={styles.cancelButton}
+          type="button"
+          disabled={pristine || submitting}
+          onClick={reset}
+        />
+        <Button
+          label="Submit"
+          styles={styles.submitButton}
+          type="submit"
+          disabled={submitting}
+        />
+      </div>
+    </form>
+  );
 };
 
 export default reduxForm({
-    form: 'quizForm', // a unique identifier for this form
-    //validate,
+  form: "quizForm" // data that is exported from the app
+  //validate,
 })(QuizForm);
-

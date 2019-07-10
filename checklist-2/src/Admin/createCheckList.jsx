@@ -21,6 +21,7 @@ class createCheckList extends Form {
     let questionCopyArray = [...this.state.questionArray];
     questionCopyArray.push(<Question />);
     this.setState({ questionArray: questionCopyArray });
+    console.log(this.props.form);
   };
   render() {
     const { questionArray } = this.state;
