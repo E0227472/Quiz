@@ -57,15 +57,9 @@ const renderOptions = ({ fields, meta: { error } }) => (
 );
 
 // functional component to render questions and the options
-const renderQuestions = ({
-  fields,
-  meta: { touched, error, submitFailed }
-}) => (
+const renderQuestions = ({fields, meta: { touched, error, submitFailed }}) => (
   <ul>
-    {/** The question component is conditionally rendered when the field array has length != 0 */}
-    {fields.length != 0 ? (
-      <div>
-        {fields.map((question, index) => (
+        {fields.map((question, index) => 
           <Card>
             <div key={index}>
               <div className={styles.alignButtonRight}>
@@ -81,29 +75,28 @@ const renderQuestions = ({
               </h4>
 
               <Field
-                name={question}
+                name= {`${question}.question`}
                 type="text"
                 component={renderField}
                 label={`Question ${index + 1}`}
+                placeholder= "Question"
               />
 
-              <FieldArray
-                name={`${question}.options`}
-                component={renderOptions}
-              />
+                <FieldArray
+                  name={`${question}.options`}
+                  component={renderOptions}
+                />
             </div>
           </Card>
-        ))}
-      </div>
-    ) : null}
+        )}
     <div className={styles.alignCentre}>
       <div className={styles.inputField}>
         <Button
-          onClick={() => fields.push()}
+          onClick={() => fields.push({})}
           label="Add Question"
           styles={styles.AddQuestion}
           type="button"
-          disabled=""
+          disabled={false}
         />
         {(touched || submitFailed) && error && <span>{error}</span>}
       </div>

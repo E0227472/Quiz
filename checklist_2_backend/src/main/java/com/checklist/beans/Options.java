@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "Options")
@@ -50,6 +52,7 @@ public class Options implements Serializable {
 		return optionInput;
 	}
 
+
 	public void setOptionInput(String optionInput) {
 		this.optionInput = optionInput;
 	}
@@ -57,7 +60,8 @@ public class Options implements Serializable {
 	public Question getQuestion() {
 		return question;
 	}
-
+	// @JsonIgnore is added to prevent Json recursion
+		@JsonIgnore
 	public void setQuestion(Question question) {
 		this.question = question;
 	}

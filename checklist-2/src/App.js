@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import "./App.css";
-import QuizForm from "../src/Admin/QuizForm";
+import Quiz from "../src/Admin/Quiz";
 
 class App extends Component {
-  handleSubmitHandler = values => {
-    console.log(values);
-  };
-  render() { 
-    return (  
+  render() {
+    return (
       <React.Fragment>
-        <QuizForm onSubmit={this.handleSubmitHandler} />
+        <Quiz />
       </React.Fragment>
     );
   }
 }
- 
+
 export default App;

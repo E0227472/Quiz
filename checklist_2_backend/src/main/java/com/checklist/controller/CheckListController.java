@@ -1,13 +1,12 @@
 package com.checklist.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +18,6 @@ import com.checklist.beans.Question;
 import com.checklist.beans.Quiz;
 import com.checklist.exceptions.NoObjectExistException;
 import com.checklist.exceptions.QuizAlreadyExistsException;
-import com.checklist.repository.OptionsRepository;
-import com.checklist.repository.QuestionRepository;
 import com.checklist.repository.QuizRepository;
 import com.checklist.service.CheckListServiceImpl;
 
@@ -32,9 +29,6 @@ public class CheckListController {
 
 	@Autowired
 	CheckListServiceImpl checkListServiceImpl;
-
-	
-
 
 	// get all quizzes
 	@GetMapping("/quizzes")
@@ -60,31 +54,30 @@ public class CheckListController {
 	@PostMapping("/createquiz")
 	public Quiz createQuiz(@Valid @RequestBody Quiz quiz) throws QuizAlreadyExistsException {
 		// create quiz object only if name is not in database
-		
 
 		return checkListServiceImpl.createQuiz(quiz);
 	}
 
 	// update a single quiz object based on the id
 	@PutMapping("/quiz/id/{id}")
-	public ResponseEntity<Quiz> updateQuiz(@PathVariable(value = "id") long id, @RequestBody Quiz quiz) {
-		// get the employee based on the id passed in as parameters and then modify the
-		// data
-		Optional<Quiz> quz = quizRepository.findById(id);
+	public ResponseEntity<Quiz> updateQuiz(@PathVariable(value = "id") long id, @RequestBody Quiz quiz)
+			throws NoObjectExistException {
 
-		// updating the employee object
-		if (quz.isPresent()) {
-			Quiz _quz = quz.get();
-			_quz.setQuiz(quiz.getQuiz()); // => update the quiz name
-			_quz.getQuestions().clear();
-			for (Question question : quiz.getQuestions())
-				_quz.addQuestion(question);
-
-			return new ResponseEntity<>(quizRepository.save(_quz), HttpStatus.OK);
-		} else
-
-		{
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return checkListServiceImpl.updateQuiz(quiz, id);
 	}
+
+	@DeleteMapping("/delete/all")
+	public void delete() {
+		checkListServiceImpl.deleteAll();
+
+	}
+
+	// Create a new question
+	@PostMapping("/createquestion")
+	public Question createQuestion(@Valid @RequestBody Question question) {
+		// create quiz object only if name is not in database
+
+		return checkListServiceImpl.createQuestion(question);
+	}
+
 }
