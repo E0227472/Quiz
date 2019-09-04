@@ -1,0 +1,25 @@
+@import "inputVariables.scss";
+
+.inputField {
+  position: $position;
+  margin-bottom: $marginPaddingBottom;
+  padding-bottom: $marginPaddingBottom;
+  width: $width;
+  display: $display;
+}
+
+.alignCentre {
+  text-align: $textAlign;
+}
+
+
+.AddOption {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  font-size: 26px;
+  width: 80%;
+}
+
+.alignButtonRight {
+  text-align: right;
+}

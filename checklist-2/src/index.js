@@ -7,11 +7,13 @@ import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.min.css";
 import { reducer as reduxFormReducer } from 'redux-form';
 import { createStore, combineReducers } from 'redux';
+import QuizForm from "./store/reducers/quizForm";
 import { Provider } from "react-redux";
 
 
 const rootReducer = combineReducers({
     form: reduxFormReducer,
+    quizForm: QuizForm
 });
 
 const store = createStore(rootReducer);

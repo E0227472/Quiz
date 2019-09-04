@@ -1,14 +1,17 @@
 import React from "react";
 import { Field, FieldArray, reduxForm } from "redux-form";
-import styles from "./QuizForm.module.css";
-import Card from "../common/card/card";
+import "../stylingComponent/styles.scss";
 import Button from "../common/button/button";
 import RemoveButton from "../common/button/removebutton";
+import Card from "../common/card/card";
+import { connect } from 'react-redux'
+
+
 
 // functional component for general input fields
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
-  <div className={styles.alignCentre}>
-    <div className={styles.inputField}>
+  <div className = "alignCentre">
+    <div className="inputField">
       <input
         {...input}
         type={type}
@@ -23,12 +26,12 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 // functional component to render the options
 const renderOptions = ({ fields, meta: { error } }) => (
   <ul>
-    <div className={styles.alignCentre}>
-      <div className={styles.inputField}>
+    <div className= "alignCentre">
+      <div className= "inputField">
         <Button
           onClick={() => fields.push()}
           label="Add Option"
-          styles={styles.AddOption}
+          styles= "AddOption"
           type="button"
           disabled=""
         />
@@ -36,15 +39,15 @@ const renderOptions = ({ fields, meta: { error } }) => (
     </div>
     {fields.map((option, index) => (
       <div key={index}>
-        <div className={styles.alignButtonRight}>
+        <div className= "alignButtonRight">
           <RemoveButton
             iconName="fa fa-trash"
             onClick={() => fields.remove(index)}
-            styling={styles.smallerIconOption}
+            styling= "smallerIconOption"
           />
         </div>
         <Field
-          name={option}
+          name={`${option}.optionInput`}
           type="text"
           component={renderField}
           label={`Option ${index + 1}`}
@@ -62,15 +65,15 @@ const renderQuestions = ({fields, meta: { touched, error, submitFailed }}) => (
         {fields.map((question, index) => 
           <Card>
             <div key={index}>
-              <div className={styles.alignButtonRight}>
+              <div className= "alignButtonRight">
                 <RemoveButton
                   iconName="fa fa-trash"
                   onClick={() => fields.remove(index)}
-                  styling={styles.enlargeIconQuestion}
+                  styling= "enlargeIconQuestion"
                 />
               </div>
 
-              <h4 className={styles.alignQuestionLabel}>
+              <h4 className= "alignQuestionLabel">
                 Question {index + 1}
               </h4>
 
@@ -89,12 +92,12 @@ const renderQuestions = ({fields, meta: { touched, error, submitFailed }}) => (
             </div>
           </Card>
         )}
-    <div className={styles.alignCentre}>
-      <div className={styles.inputField}>
+    <div className= "alignCentre">
+      <div className= "inputField">
         <Button
           onClick={() => fields.push({})}
           label="Add Question"
-          styles={styles.AddQuestion}
+          styles= "AddQuestion"
           type="button"
           disabled={false}
         />
@@ -103,9 +106,9 @@ const renderQuestions = ({fields, meta: { touched, error, submitFailed }}) => (
     </div>
   </ul>
 );
-
-const QuizForm = props => {
-  const { handleSubmit, pristine, reset, submitting } = props;
+// QuizForm component => stateless 
+let QuizForm = props => {
+  const { handleSubmit, pristine, reset, submitting} = props;
   return (
     <form onSubmit={handleSubmit}>
       <Card>
@@ -113,17 +116,17 @@ const QuizForm = props => {
       </Card>
       <FieldArray name="questions" component={renderQuestions} />
 
-      <div className={styles.alignCentre}>
+      <div className= "alignCentre">
         <Button
           label="Cancel"
-          styles={styles.cancelButton}
+          styles= "cancelButton"
           type="button"
           disabled={pristine || submitting}
           onClick={reset}
         />
         <Button
           label="Submit"
-          styles={styles.submitButton}
+          styles= "submitButton"
           type="submit"
           disabled={submitting}
         />
@@ -132,7 +135,20 @@ const QuizForm = props => {
   );
 };
 
-export default reduxForm({
-  form: "quizForm" // data that is exported from the app
-  //validate,
-})(QuizForm);
+
+// get the quiz object from the redux store => obtained from the back-end
+const mapStateToProps = state => {
+  return {
+    // the initialValues key automatically maps the values to the form
+    initialValues: {
+      quiz: state.quizForm.quiz.quiz,
+      questions: state.quizForm.quiz.questions
+    }
+  };
+};
+
+export default connect(mapStateToProps)(
+  reduxForm({ 
+    form: 'quizForm', 
+    enableReinitialize: true //=> set enableReinitialize to true each time state changes
+  })(QuizForm))
