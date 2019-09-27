@@ -7,7 +7,9 @@ const quiz = require('../models/quiz');
 // get all the quizzes from the database
 router.get('/', async (req, res) => {
   const { Quiz } = quiz; // get the movie class
-  const quizzes = await Quiz.find().sort('name');
+  const quizzes = await Quiz.find()
+    .sort('name')
+    .select({ name: 1 });
   res.send(quizzes);
   console.log(quizzes);
 });
@@ -15,11 +17,13 @@ router.get('/', async (req, res) => {
 // get the quiz by name
 router.get('/:name', async (req, res) => {
   const { Quiz } = quiz;
-  const customer = await Quiz.findOne({ name: req.params.name });
+  const quz = await Quiz.findOne({ name: req.params.name }).select({
+    questions: 1,
+  });
 
-  if (!customer) return res.status(404).send('No such quiz exists');
+  if (!quz) return res.status(404).send('No such quiz exists');
 
-  res.send(customer);
+  res.send(quz);
 });
 
 // post a quiz to database

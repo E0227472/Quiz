@@ -64,6 +64,11 @@ function ValidateQuiz(quiz) {
   };
   return Joi.validate(quiz, schema);
 }
+// // add to the counter value
+// async function AddCounter() {
+//   const count = await Quiz.find().countDocuments();
+//   return count;
+// }
 
 // create new quiz object
 async function CreateQuiz(quiz) {

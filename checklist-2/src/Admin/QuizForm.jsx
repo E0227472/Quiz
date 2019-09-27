@@ -47,7 +47,7 @@ const renderOptions = ({ fields, meta: { error } }) => (
           />
         </div>
         <Field
-          name={`${option}.optionInput`}
+          name={`${option}.name`}
           type="text"
           component={renderField}
           label={`Option ${index + 1}`}
@@ -78,7 +78,7 @@ const renderQuestions = ({fields, meta: { touched, error, submitFailed }}) => (
               </h4>
 
               <Field
-                name= {`${question}.question`}
+                name= {`${question}.name`}
                 type="text"
                 component={renderField}
                 label={`Question ${index + 1}`}
@@ -112,7 +112,7 @@ let QuizForm = props => {
   return (
     <form onSubmit={handleSubmit}>
       <Card>
-        <Field name="quiz" type="text" component={renderField} label="Quiz" />
+        <Field name="name" type="text" component={renderField} label="Quiz" />
       </Card>
       <FieldArray name="questions" component={renderQuestions} />
 

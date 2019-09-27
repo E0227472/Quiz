@@ -13,7 +13,7 @@ class FormLoader extends Component {
   getFormData = async() => {
     try {
       // receive a promise and then instantiate data to result from back-end 
-     const {data: result} = await http.get(config.apiEndPoint + "/quiz/id/1");
+     const {data: result} = await http.get(config.apiEndPoint + "api/quiz/name");
 
      console.log(JSON.stringify(result));
       // remove the id property from both question object and the option object. 

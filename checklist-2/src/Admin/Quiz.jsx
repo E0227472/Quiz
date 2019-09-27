@@ -9,9 +9,10 @@ class Quiz extends Component {
 
 
     handleSubmitHandler = async values => {
-        const httpPost = config.apiEndPoint + "createquiz";
-        const data = await http.post(httpPost, values);
+        const httpPost = config.apiEndPoint + "api/quiz";
+       const result = await http.post(httpPost, values);
         console.log(JSON.stringify(values));
+        console.log(result);
         
     };
 

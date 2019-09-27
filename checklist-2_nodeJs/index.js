@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const Cors = require('cors');
 const quiz = require('./routes/quizRoute');
 
 const app = express();
-
+app.use(Cors());
 mongoose
   .connect('mongodb://localhost/checklist')
   .then(() => console.log('Connected to MongoDB...'))
