@@ -6,7 +6,7 @@ const Button = (props) => {
     return (
       <button 
       type= {type}
-      className={styles != null ? styles + " " + "btn btn-light" : "btn btn-light"}
+      className={styles != null ? styles + "btn btn-light" : "btn btn-light"}
       onClick = {onClick}
       disabled = {disabled}
       >

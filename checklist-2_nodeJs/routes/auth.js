@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
-const jwt = require('jsonwebtoken');
 const PasswordComplexity = require('joi-password-complexity');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
@@ -50,7 +49,7 @@ router.post('/', async (req, res) => {
   // generate a jwt based on the user id stored in the database
   // token used in the front- end to access certain pages
   // private key required to modify the jwt
-  const token = jwt.sign({ _id: _user._id }, 'jwtPrivateKey');
+  const token = _user.generateToken();
   res.send(token);
 });
 

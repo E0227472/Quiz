@@ -1,10 +1,12 @@
 const Joi = require('@hapi/joi');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const mongoose = require('mongoose');
 const PasswordComplexity = require('joi-password-complexity');
 const bcrypt = require('bcrypt');
 // User object for sign-up
 
-// create an userSchema to pass as object reference in User class
+// user schema object with the properties
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -26,6 +28,11 @@ const userSchema = new mongoose.Schema({
     maxlength: 1025,
   },
 });
+// to create new functions in the user object model, generate token in user model
+userSchema.methods.generateToken = function() {
+  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+  return token;
+};
 
 // User object - with email
 const User = mongoose.model('User', userSchema);

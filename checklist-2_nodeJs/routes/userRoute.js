@@ -21,7 +21,13 @@ router.post('/', async (req, res) => {
   result
     .then(output => {
       // lodash pick method only selects the properties as shown
-      res.send(_.pick(output, ['name', 'email']));
+      // send the token to the header of the response object, send the rest normally
+      const token = output.generateToken();
+
+      // header has property name 'x-auth-token'
+      res
+        .header('x-auth-token', token)
+        .send(_.pick(output, ['_id', 'name', 'email']));
     })
     .catch(err => {
       console.log(err);
